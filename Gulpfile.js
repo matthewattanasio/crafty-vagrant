@@ -15,7 +15,10 @@ var plugins = require('gulp-load-plugins')({
     'vinyl-source-stream',
     'vinyl-buffer',
     'browser-sync'
-  ]
+  ],
+  rename: {
+    'gulp-sourcemaps': 'sourcemaps'
+  }
 });
 
 // Source and destination paths for tasks:
@@ -125,11 +128,11 @@ gulp.task('images', function(){
  */
 gulp.task('styles', function(){
   gulp.src(path.src + '/styles/main.scss')
+    .pipe(plugins.sourcemaps.init())
     // Compile Sass:
     .pipe(plugins.sass.sync({
         includePaths: [
-          path.npm + '/bourbon/app/assets/stylesheets',
-          path.npm + '/bourbon-neat/app/assets/stylesheets',
+          path.npm + '/bootstrap-sass/assets/stylesheets',
           path.npm + '/node.normalize.scss'
         ]
       })
@@ -143,6 +146,7 @@ gulp.task('styles', function(){
         'ie 9'
       ]
     }))
+    .pipe(plugins.sourcemaps.write('./'))
     // Write main.css
     .pipe(gulp.dest(path.dest + '/styles'))
     // Report file size:
